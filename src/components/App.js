@@ -1,67 +1,16 @@
-import './index.css';
-import headerLogoPath from './images/header-logo.svg'
+import '../index.css';
+
+import Footer from './Footer';
+import Main from './Main';
+import Header from './Header';
 
 function App() {
   return (
-    <div className="page__content">
-      
-      {/* шапка */}
-      <header className="header">
-        <img
-          className="header__logo"
-          src={headerLogoPath}
-          alt="логотип Mesto Russia белого цвета"
-        />
-      </header>
+    <div className="page__content"> 
+      <Header />
+      <Main />
+      <Footer />
 
-      <main>
-
-        {/* секция профиля */}
-        <section className="profile">
-          <div className="profile__image-text">
-            <img
-              className="profile__image"
-              src="#"
-              alt="аватарка"
-              name="avatar"              
-            />
-            {/* кнопка редактирования аватарки профиля */}
-            <button 
-            className="profile__image-edit-btn" 
-            aria-label="Edit" 
-            type="button">
-            </button>
-            <div className="profile__text-box">
-              <div className="profile__name-edit-box">
-                <h1 className="profile__name">Жак-Ив Кусто</h1>
-                {/* кнопка редактирования имени и профессии профиля */}
-                <button 
-                className="profile__edit-btn" 
-                aria-label="Edit" 
-                type="button">
-                </button>
-              </div>
-              <p className="profile__profession">Исследователь океана</p>
-            </div>
-          </div>
-          {/* кнопка добавления */}
-          <button 
-          className="profile__add-btn" 
-          aria-label="Add" 
-          type="button">
-          </button>
-        </section>
-        {/* секция с карточками-картинками и лайком */}
-        <section className="cards">
-          <ul className="cards__container"></ul>
-        </section>
-
-      </main>
-
-      {/* подвал */}
-      <footer className="footer">
-        <p className="footer__note">&copy; 2022 Mesto Russia</p>
-      </footer>
 
       {/* секция попапа с редактированием данных пользователя */}
       <section className="popup popup_type_user form">
