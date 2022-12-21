@@ -1,4 +1,18 @@
 
+const handleEditAvatarClick = () => {
+  document.querySelector(".popup_type_avatar").classList.add("popup_opened");
+}
+
+const handleEditProfileClick = () => {
+    document.querySelector(".popup_type_user").classList.add("popup_opened");
+}
+
+const handleAddPlaceClick = () => {
+    document.querySelector(".popup_type_card").classList.add("popup_opened");
+  }
+
+
+
 function Main() {
   return (
     <main>
@@ -16,8 +30,9 @@ function Main() {
         <button 
         className="profile__image-edit-btn" 
         aria-label="Edit" 
-        type="button">
-        </button>
+        type="button"
+        onClick={handleEditAvatarClick}
+        ></button>
         <div className="profile__text-box">
           <div className="profile__name-edit-box">
             <h1 className="profile__name">Жак-Ив Кусто</h1>
@@ -25,8 +40,9 @@ function Main() {
             <button 
             className="profile__edit-btn" 
             aria-label="Edit" 
-            type="button">
-            </button>
+            type="button"
+            onClick={handleEditProfileClick}
+            ></button>
           </div>
           <p className="profile__profession">Исследователь океана</p>
         </div>
@@ -35,8 +51,9 @@ function Main() {
       <button 
       className="profile__add-btn" 
       aria-label="Add" 
-      type="button">
-      </button>
+      type="button"
+      onClick={handleAddPlaceClick}
+      ></button>
     </section>
     {/* секция с карточками-картинками и лайком */}
     <section className="cards">
