@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 
+//импортируем компоненты
 import api from "../utils/api.js";
-
 import Card from './Card.js';
 
 
-function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
+function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
 
   let [userName, setUserName] = useState("");
   let [userDescription , setUserDescription ] = useState("");
@@ -43,8 +43,9 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
   }, [])
 
 
+
   return (
-    
+
     <main>
 
     {/* секция профиля */}
@@ -54,7 +55,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
           className="profile__image"
           src={userAvatar}
           alt="аватарка"
-          name="avatar"              
+          name="avatar"            
         />
         {/* кнопка редактирования аватарки профиля */}
         <button 
@@ -90,12 +91,13 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
     <section className="cards">
       <ul className="cards__container">
         {cards.map((card) => (
-        <Card key={card._id} {...card} />
+        <Card key={card._id} onCardClick={onCardClick} {...card} />
         ))}
       </ul>
     </section>
 
   </main>
+
   )
 }
 

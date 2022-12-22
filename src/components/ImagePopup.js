@@ -1,19 +1,32 @@
-function ImagePopup() {
+//компонент попапа с увеличенной картинкой
+function ImagePopup({ card, isOpen, onClose }) {
+
   return (
-    <section className="popup image-zoom">
+
+    <section className={`popup image-zoom ${isOpen ? 'popup_opened' : ''}`}>
+
       <figure className="image-zoom__container">
+
         <img 
           className="image-zoom__image" 
-          src="#" 
-          alt="#" />
+          src={card.link} 
+          alt={card.name} 
+        />
+
         <button
           className="popup__close-btn image-zoom__close-btn"
           aria-label="Close"
           type="button"
+          onClick={onClose}
         ></button>
-        <figcaption className="image-zoom__caption"></figcaption>
+
+        <figcaption className="image-zoom__caption">{card.name}
+        </figcaption>
+
       </figure>
+
     </section>
+
   )
 }
 

@@ -1,4 +1,4 @@
-
+//компонент попапа с формой
 function PopupWithForm({ children, title, name, buttonText, isOpen, onClose }) {
 
   return (

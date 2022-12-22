@@ -1,7 +1,9 @@
 import { useState } from 'react';
 
+//импортируем стили
 import '../index.css';
 
+// импортируем компоненты
 import Footer from './Footer';
 import Main from './Main';
 import Header from './Header';
@@ -12,43 +14,68 @@ import ImagePopup from './ImagePopup';
 
 function App() {
 
+  //переменная состояния попапа обновления данных пользователя
   let [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
 
+  //метод обработки открытия попапа обновления данных пользователя
   const handleEditProfileClick = () => {
     setIsEditProfilePopupOpen(isEditProfilePopupOpen = true);
   }
 
 
+//переменная состояния попапа обновления аватара
   let [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
+  //метод обработки открытия попапа обновления аватара
   const handleEditAvatarClick = () => {
     setIsEditAvatarPopupOpen(isEditAvatarPopupOpen = true);
   }
 
 
+  //переменная состояния попапа добавления новой карточки
   let [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
 
+  //метод обработки открытия попапа добавления новой карточки
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(isAddPlacePopupOpen = true);
   }
 
 
+  //переменные состояния попапа с увеличенной картинки карточки
+  let [isCardOpen, setIsCardOpen] = useState(false);
+
+  let [selectedCard, setSelectedCard] = useState({})
+
+  //метод обработки открытия попапа с увеличенной картинки
+  const handleCardClick  = ({name, link}) => {
+    setIsCardOpen(isCardOpen = true);
+    setSelectedCard({name, link});
+  }
+
+
+  //метод обработки закрытия всех попапов
   const closeAllPopups = () => {
     setIsEditAvatarPopupOpen(isEditAvatarPopupOpen = false);
     setIsAddPlacePopupOpen(isAddPlacePopupOpen = false);
     setIsEditProfilePopupOpen(isEditProfilePopupOpen = false);
+    setIsCardOpen(isCardOpen = false);
   }
 
 
 
   return (
+
     <div className="page__content"> 
+    
       <Header />
+
       <Main 
         onEditProfile={handleEditProfileClick} 
         onAddPlace={handleAddPlaceClick} 
         onEditAvatar={handleEditAvatarClick}
+        onCardClick={handleCardClick}
       />
+
       <Footer />
       
       <PopupWithForm 
@@ -68,7 +95,8 @@ function App() {
           placeholder="Имя"
           required
         />
-        <span className="username-error popup__error"></span>
+        <span className="username-error popup__error">
+        </span>
         <input
           className="popup__input popup__input_type_profession"
           id="user-job"
@@ -79,7 +107,8 @@ function App() {
           placeholder="О Себе"
           required
         />
-        <span className="user-job-error popup__error"></span>
+        <span className="user-job-error popup__error">
+        </span>
       </PopupWithForm>
 
       <PopupWithForm 
@@ -100,7 +129,8 @@ function App() {
           placeholder="Название"
           required
         />
-        <span className="card-name-error popup__error"></span>
+        <span className="card-name-error popup__error">
+        </span>
         <input
           className="popup__input popup__input_type_card-link"
           id="img-link"
@@ -109,7 +139,8 @@ function App() {
           placeholder="Ссылка на картинку"
           required
         />
-        <span className="img-link-error popup__error"></span>
+        <span className="img-link-error popup__error">
+        </span>
       </PopupWithForm>
 
       <PopupWithForm 
@@ -127,7 +158,8 @@ function App() {
           placeholder="Ссылка на аватарку"
           required
         />
-        <span className="avatar-link-error popup__error"></span>
+        <span className="avatar-link-error popup__error">
+        </span>
       </PopupWithForm>
 
       <PopupWithForm 
@@ -136,10 +168,15 @@ function App() {
         buttonText="Да"
         onClose={closeAllPopups} 
       />
-      <ImagePopup />
+
+      <ImagePopup 
+        card={selectedCard} 
+        isOpen={isCardOpen} 
+        onClose={closeAllPopups} 
+      />
       
     </div>
-    
+
   );
 }
 

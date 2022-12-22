@@ -2,7 +2,6 @@
 
 @import url(./vendor/fonts/_inter/fonts_inter.css);
 
-/* @import url(./blocks/page/page.css); */
 @import url(./blocks/page/__content/page__content.css);
 
 @import url(./blocks/header/header.css);

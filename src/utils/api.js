@@ -1,9 +1,10 @@
   import { apiConfig } from './constants.js';
   
-  class Api {
-    constructor({ url, headers }) {
-      this._url = url;
-      this._headers = headers;
+class Api {
+  
+  constructor({ url, headers }) {
+    this._url = url;
+    this._headers = headers;
   }
 
   //метод проверки от сервера и преобразование из json
@@ -104,6 +105,7 @@
   }
 
 }
+
 
 //создаём экземпляр класса Api для работы с сервером
 const api = new Api(apiConfig);
