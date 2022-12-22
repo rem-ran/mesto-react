@@ -1,5 +1,31 @@
+import { useState, useEffect } from 'react';
+
+import api from "../utils/api.js";
+
 
 function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
+
+  let [userName, setUserName] = useState("");
+  let [userDescription , setUserDescription ] = useState("");
+  let [userAvatar, setUserAvatar] = useState("");
+
+
+  useEffect(() => {
+
+    api.getServerUserInfo()
+
+    .then(({name, about, avatar}) => {
+      setUserName(name);
+      setUserDescription(about);
+      setUserAvatar(avatar);
+    })
+
+    .catch((error) => {
+      console.log(`Ошибка при начальной загрузки информации с сервера: ${error}`);
+    })
+
+  })
+
   return (
     <main>
 
@@ -8,7 +34,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
       <div className="profile__image-text">
         <img
           className="profile__image"
-          src="#"
+          src={userAvatar}
           alt="аватарка"
           name="avatar"              
         />
@@ -21,7 +47,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
         ></button>
         <div className="profile__text-box">
           <div className="profile__name-edit-box">
-            <h1 className="profile__name">Жак-Ив Кусто</h1>
+            <h1 className="profile__name">{userName}</h1>
             {/* кнопка редактирования имени и профессии профиля */}
             <button 
             className="profile__edit-btn" 
@@ -30,7 +56,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
             onClick={onEditProfile}
             ></button>
           </div>
-          <p className="profile__profession">Исследователь океана</p>
+          <p className="profile__profession">{userDescription}</p>
         </div>
       </div>
       {/* кнопка добавления */}

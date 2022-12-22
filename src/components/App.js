@@ -32,6 +32,7 @@ function App() {
     setIsAddPlacePopupOpen(isAddPlacePopupOpen = true);
   }
 
+
   const closeAllPopups = () => {
     setIsEditAvatarPopupOpen(isEditAvatarPopupOpen = false);
     setIsAddPlacePopupOpen(isAddPlacePopupOpen = false);
