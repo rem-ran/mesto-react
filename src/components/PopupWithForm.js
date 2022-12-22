@@ -1,9 +1,9 @@
 
-function PopupWithForm({ children, title, name, buttonText }) {
+function PopupWithForm({ children, title, name, buttonText, isOpen }) {
 
   return (
-    
-    <section className={`popup form popup_type_${name}`}>
+
+    <section className={`popup form popup_type_${name} ${isOpen ? 'popup_opened' : ''}`  }>
 
       <div className={`popup__container popup__container_${name}`}>
         <h2 className={`popup__heading popup__heading_type_${name}`}>
