@@ -15,7 +15,7 @@ function App() {
   let [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
 
   const handleEditProfileClick = () => {
-    setIsEditProfilePopupOpen(setIsEditProfilePopupOpen = true);
+    setIsEditProfilePopupOpen(isEditProfilePopupOpen = true);
   }
 
 
@@ -30,6 +30,12 @@ function App() {
 
   const handleAddPlaceClick = () => {
     setIsAddPlacePopupOpen(isAddPlacePopupOpen = true);
+  }
+
+  const closeAllPopups = () => {
+    setIsEditAvatarPopupOpen(isEditAvatarPopupOpen = false);
+    setIsAddPlacePopupOpen(isAddPlacePopupOpen = false);
+    setIsEditProfilePopupOpen(isEditProfilePopupOpen = false);
   }
 
 
@@ -49,6 +55,7 @@ function App() {
         title="Редактировать профиль" 
         buttonText="Сохранить" 
         isOpen={isEditProfilePopupOpen}
+        onClose={closeAllPopups}
       >
         <input
           className="popup__input popup__input_type_username"
@@ -79,6 +86,7 @@ function App() {
         title="Новое место" 
         buttonText="Создать"
         isOpen={isAddPlacePopupOpen}
+        onClose={closeAllPopups}
       >
       
         <input
@@ -108,6 +116,7 @@ function App() {
         title="Обновить аватар" 
         buttonText="Сохранить"
         isOpen={isEditAvatarPopupOpen}
+        onClose={closeAllPopups}
       >
         <input
           className="popup__input popup__input_type_avatar-link"
@@ -123,7 +132,8 @@ function App() {
       <PopupWithForm 
         name="card-submit" 
         title="Вы уверены?" 
-        buttonText="Да" 
+        buttonText="Да"
+        onClose={closeAllPopups} 
       />
       <ImagePopup />
 

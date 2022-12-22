@@ -1,5 +1,5 @@
 
-function PopupWithForm({ children, title, name, buttonText, isOpen }) {
+function PopupWithForm({ children, title, name, buttonText, isOpen, onClose }) {
 
   return (
 
@@ -32,6 +32,7 @@ function PopupWithForm({ children, title, name, buttonText, isOpen }) {
           className={`popup__close-btn popup__close-btn_type_${name}`}
           type="button"
           aria-label="Close"
+          onClick={onClose}
         ></button>
 
       </div>
