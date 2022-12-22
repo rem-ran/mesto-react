@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 
 import api from "../utils/api.js";
 
+import Card from './Card.js';
+
 
 function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
 
   let [userName, setUserName] = useState("");
   let [userDescription , setUserDescription ] = useState("");
   let [userAvatar, setUserAvatar] = useState("");
+  let [cards, setCards] = useState([]);
 
 
   useEffect(() => {
@@ -26,7 +29,22 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
 
   })
 
+  useEffect(() => {
+
+    api.getAllCards()
+    .then((cards) => {
+      setCards(cards)
+    })
+
+    .catch((error) => {
+      console.log(`Ошибка при начальной загрузки информации cards с сервера: ${error}`);
+    })
+
+  }, [])
+
+
   return (
+    
     <main>
 
     {/* секция профиля */}
@@ -67,9 +85,14 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar}) {
       onClick={onAddPlace}
       ></button>
     </section>
+
     {/* секция с карточками-картинками и лайком */}
     <section className="cards">
-      <ul className="cards__container"></ul>
+      <ul className="cards__container">
+        {cards.map((card) => (
+        <Card key={card._id} {...card} />
+        ))}
+      </ul>
     </section>
 
   </main>

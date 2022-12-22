@@ -137,35 +137,9 @@ function App() {
         onClose={closeAllPopups} 
       />
       <ImagePopup />
-
-
-
-      {/* образец карточки */}
-      <template className="card-template">
-        <li className="card" id="#">
-          <img 
-          className="card__image" 
-          src="#" 
-          alt="#" />
-          <button 
-          className="card__delete-btn" 
-          aria-label="Delete" 
-          type="button"></button>
-          <div className="card__text-box">
-            <h2 className="card__heading"></h2>
-            <div className="card__like-box">
-              <button 
-              className="card__like-btn" 
-              aria-label="Like" 
-              type="button">
-              </button>
-              <span className="card__like-counter"></span>
-            </div>
-          </div>
-        </li>
-      </template>
       
     </div>
+    
   );
 }
 
