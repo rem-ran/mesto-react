@@ -5,43 +5,39 @@ import api from "../utils/api.js";
 import Card from './Card.js';
 
 
+//компонент начальной страницы
 function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
 
+
+  //переменная состояния имени пользователя
   let [userName, setUserName] = useState("");
+
+  //переменная состояния профессии пользователя
   let [userDescription , setUserDescription ] = useState("");
+
+  //переменная состояния аватарки пользователя
   let [userAvatar, setUserAvatar] = useState("");
+
+  //переменная состояния начального массива карточек
   let [cards, setCards] = useState([]);
 
 
+//Запрос к API за информацией о пользователе и массиве карточек
   useEffect(() => {
+    api.getDataForInitialLoading()
 
-    api.getServerUserInfo()
-
-    .then(({name, about, avatar}) => {
+    .then(([{name, about, avatar}, cards ]) => {
       setUserName(name);
       setUserDescription(about);
       setUserAvatar(avatar);
+      setCards(cards)
     })
 
     .catch((error) => {
       console.log(`Ошибка при начальной загрузки информации с сервера: ${error}`);
     })
 
-  })
-
-  useEffect(() => {
-
-    api.getAllCards()
-    .then((cards) => {
-      setCards(cards)
-    })
-
-    .catch((error) => {
-      console.log(`Ошибка при начальной загрузки информации cards с сервера: ${error}`);
-    })
-
   }, [])
-
 
 
   return (

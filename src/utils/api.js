@@ -17,7 +17,7 @@ class Api {
 
 
   //получить список всех карточек в виде массива
-  getAllCards() {
+  _getAllCards() {
     return fetch(`${this._url}/cards`, {
       method: "GET",
       headers: this._headers
@@ -68,7 +68,7 @@ class Api {
 
 
   //получить данные своего пользователя
-  getServerUserInfo() {
+  _getServerUserInfo() {
     return fetch(`${this._url}/users/me`, {
       method: "GET",
       headers: this._headers
@@ -101,7 +101,7 @@ class Api {
 
   //общий метод получения данных, необходимых при начальной отрисовки сайта
   getDataForInitialLoading() {
-    return Promise.all([this.getServerUserInfo(), this.getAllCards()]);
+    return Promise.all([this._getServerUserInfo(), this._getAllCards()]);
   }
 
 }
