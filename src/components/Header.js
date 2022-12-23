@@ -1,7 +1,7 @@
+//импортируем картинку лого
+import headerLogoPath from "../images/header-logo.svg";
 
-import headerLogoPath from '../images/header-logo.svg';
-
-
+//компонент хедера
 function Header() {
   return (
     <header className="header">
@@ -11,7 +11,7 @@ function Header() {
         alt="логотип Mesto Russia белого цвета"
       />
     </header>
-  )
+  );
 }
 
 export default Header;
