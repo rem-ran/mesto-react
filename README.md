@@ -2,6 +2,8 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+С сайтом можно ознакомиться по ссылке https://rem-ran.github.io/mesto-react/
+
 ---
 
 Проект одностраничного сайта, который должен корректно отображаться на экранах популярных размеров (320, 768, 1024 и 1280 пикселей).
