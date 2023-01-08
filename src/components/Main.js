@@ -1,38 +1,29 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 //импортируем компоненты
 import api from "../utils/api.js";
 import Card from "./Card.js";
+import { CurrentUserContext } from "../context/CurrentUserContext.js";
 
 //компонент начальной страницы
 function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
-  //переменная состояния имени пользователя
-  const [userName, setUserName] = useState("");
-
-  //переменная состояния профессии пользователя
-  const [userDescription, setUserDescription] = useState("");
-
-  //переменная состояния аватарки пользователя
-  const [userAvatar, setUserAvatar] = useState("");
+  // const currentUser = useContext(CurrentUserContext);
+  const { name, about, avatar } = useContext(CurrentUserContext);
 
   //переменная состояния начального массива карточек
   const [cards, setCards] = useState([]);
 
-  //Запрос к API за информацией о пользователе и массиве карточек
   useEffect(() => {
     api
-      .getDataForInitialLoading()
+      .getAllCards()
 
-      .then(([{ name, about, avatar }, cards]) => {
-        setUserName(name);
-        setUserDescription(about);
-        setUserAvatar(avatar);
+      .then((cards) => {
         setCards(cards);
       })
 
       .catch((error) => {
         console.log(
-          `Ошибка при начальной загрузки информации с сервера: ${error}`
+          `Ошибка при начальной загрузки карточек с сервера: ${error}`
         );
       });
   }, []);
@@ -44,7 +35,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
         <div className="profile__image-text">
           <img
             className="profile__image"
-            src={userAvatar}
+            src={avatar}
             alt="аватарка"
             name="avatar"
           />
@@ -57,7 +48,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
           ></button>
           <div className="profile__text-box">
             <div className="profile__name-edit-box">
-              <h1 className="profile__name">{userName}</h1>
+              <h1 className="profile__name">{name}</h1>
               {/* кнопка редактирования имени и профессии профиля */}
               <button
                 className="profile__edit-btn"
@@ -66,7 +57,7 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
                 onClick={onEditProfile}
               ></button>
             </div>
-            <p className="profile__profession">{userDescription}</p>
+            <p className="profile__profession">{about}</p>
           </div>
         </div>
         {/* кнопка добавления */}

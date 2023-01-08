@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // импортируем компоненты
 import Footer from "./Footer";
@@ -6,6 +6,8 @@ import Main from "./Main";
 import Header from "./Header";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
+import { CurrentUserContext } from "../context/CurrentUserContext";
+import api from "../utils/api";
 
 function App() {
   //переменная состояния попапа обновления данных пользователя
@@ -21,6 +23,23 @@ function App() {
   const [isCardOpen, setIsCardOpen] = useState(false);
 
   const [selectedCard, setSelectedCard] = useState({});
+
+  const [currentUser, setCurrentUser] = useState({});
+
+  useEffect(() => {
+    api
+      .getServerUserInfo()
+
+      .then((userData) => {
+        setCurrentUser(userData);
+      })
+
+      .catch((error) => {
+        console.log(
+          `Ошибка при начальной загрузки информации пользователя с сервера: ${error}`
+        );
+      });
+  }, []);
 
   //метод обработки открытия попапа обновления данных пользователя
   const handleEditProfileClick = () => {
@@ -53,107 +72,109 @@ function App() {
 
   return (
     <div className="page__content">
-      <Header />
+      <CurrentUserContext.Provider value={currentUser}>
+        <Header />
 
-      <Main
-        onEditProfile={handleEditProfileClick}
-        onAddPlace={handleAddPlaceClick}
-        onEditAvatar={handleEditAvatarClick}
-        onCardClick={handleCardClick}
-      />
-
-      <Footer />
-
-      <PopupWithForm
-        name="user"
-        title="Редактировать профиль"
-        buttonText="Сохранить"
-        isOpen={isEditProfilePopupOpen}
-        onClose={closeAllPopups}
-      >
-        <input
-          className="popup__input popup__input_type_username"
-          id="username"
-          type="text"
-          minLength="2"
-          maxLength="40"
-          name="name"
-          placeholder="Имя"
-          required
+        <Main
+          onEditProfile={handleEditProfileClick}
+          onAddPlace={handleAddPlaceClick}
+          onEditAvatar={handleEditAvatarClick}
+          onCardClick={handleCardClick}
         />
-        <span className="username-error popup__error"></span>
-        <input
-          className="popup__input popup__input_type_profession"
-          id="user-job"
-          type="text"
-          minLength="2"
-          maxLength="200"
-          name="about"
-          placeholder="О Себе"
-          required
-        />
-        <span className="user-job-error popup__error"></span>
-      </PopupWithForm>
 
-      <PopupWithForm
-        name="card"
-        title="Новое место"
-        buttonText="Создать"
-        isOpen={isAddPlacePopupOpen}
-        onClose={closeAllPopups}
-      >
-        <input
-          className="popup__input popup__input_type_card-name"
-          id="card-name"
-          type="text"
-          minLength="2"
-          maxLength="30"
-          name="name"
-          placeholder="Название"
-          required
-        />
-        <span className="card-name-error popup__error"></span>
-        <input
-          className="popup__input popup__input_type_card-link"
-          id="img-link"
-          type="url"
-          name="link"
-          placeholder="Ссылка на картинку"
-          required
-        />
-        <span className="img-link-error popup__error"></span>
-      </PopupWithForm>
+        <Footer />
 
-      <PopupWithForm
-        name="avatar"
-        title="Обновить аватар"
-        buttonText="Сохранить"
-        isOpen={isEditAvatarPopupOpen}
-        onClose={closeAllPopups}
-      >
-        <input
-          className="popup__input popup__input_type_avatar-link"
-          id="avatar-link"
-          type="url"
+        <PopupWithForm
+          name="user"
+          title="Редактировать профиль"
+          buttonText="Сохранить"
+          isOpen={isEditProfilePopupOpen}
+          onClose={closeAllPopups}
+        >
+          <input
+            className="popup__input popup__input_type_username"
+            id="username"
+            type="text"
+            minLength="2"
+            maxLength="40"
+            name="name"
+            placeholder="Имя"
+            required
+          />
+          <span className="username-error popup__error"></span>
+          <input
+            className="popup__input popup__input_type_profession"
+            id="user-job"
+            type="text"
+            minLength="2"
+            maxLength="200"
+            name="about"
+            placeholder="О Себе"
+            required
+          />
+          <span className="user-job-error popup__error"></span>
+        </PopupWithForm>
+
+        <PopupWithForm
+          name="card"
+          title="Новое место"
+          buttonText="Создать"
+          isOpen={isAddPlacePopupOpen}
+          onClose={closeAllPopups}
+        >
+          <input
+            className="popup__input popup__input_type_card-name"
+            id="card-name"
+            type="text"
+            minLength="2"
+            maxLength="30"
+            name="name"
+            placeholder="Название"
+            required
+          />
+          <span className="card-name-error popup__error"></span>
+          <input
+            className="popup__input popup__input_type_card-link"
+            id="img-link"
+            type="url"
+            name="link"
+            placeholder="Ссылка на картинку"
+            required
+          />
+          <span className="img-link-error popup__error"></span>
+        </PopupWithForm>
+
+        <PopupWithForm
           name="avatar"
-          placeholder="Ссылка на аватарку"
-          required
+          title="Обновить аватар"
+          buttonText="Сохранить"
+          isOpen={isEditAvatarPopupOpen}
+          onClose={closeAllPopups}
+        >
+          <input
+            className="popup__input popup__input_type_avatar-link"
+            id="avatar-link"
+            type="url"
+            name="avatar"
+            placeholder="Ссылка на аватарку"
+            required
+          />
+          <span className="avatar-link-error popup__error"></span>
+        </PopupWithForm>
+
+        <PopupWithForm
+          name="card-submit"
+          title="Вы уверены?"
+          buttonText="Да"
+          onClose={closeAllPopups}
         />
-        <span className="avatar-link-error popup__error"></span>
-      </PopupWithForm>
 
-      <PopupWithForm
-        name="card-submit"
-        title="Вы уверены?"
-        buttonText="Да"
-        onClose={closeAllPopups}
-      />
-
-      <ImagePopup
-        card={selectedCard}
-        isOpen={isCardOpen}
-        onClose={closeAllPopups}
-      />
+        <ImagePopup
+          card={selectedCard}
+          isOpen={isCardOpen}
+          onClose={closeAllPopups}
+        />
+      </CurrentUserContext.Provider>
     </div>
   );
 }
