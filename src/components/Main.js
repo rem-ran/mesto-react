@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 
 //импортируем компоненты
 import api from "../utils/api.js";
@@ -6,27 +6,17 @@ import Card from "./Card.js";
 import { CurrentUserContext } from "../context/CurrentUserContext.js";
 
 //компонент начальной страницы
-function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
+function Main({
+  onEditProfile,
+  onAddPlace,
+  onEditAvatar,
+  onCardClick,
+  onCardLike,
+  onCardDelete,
+  cards,
+}) {
   // const currentUser = useContext(CurrentUserContext);
   const { name, about, avatar } = useContext(CurrentUserContext);
-
-  //переменная состояния начального массива карточек
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    api
-      .getAllCards()
-
-      .then((cards) => {
-        setCards(cards);
-      })
-
-      .catch((error) => {
-        console.log(
-          `Ошибка при начальной загрузки карточек с сервера: ${error}`
-        );
-      });
-  }, []);
 
   return (
     <main>
@@ -73,7 +63,13 @@ function Main({ onEditProfile, onAddPlace, onEditAvatar, onCardClick }) {
       <section className="cards">
         <ul className="cards__container">
           {cards.map((card) => (
-            <Card key={card._id} onCardClick={onCardClick} {...card} />
+            <Card
+              key={card._id}
+              onCardClick={onCardClick}
+              onCardLike={onCardLike}
+              onCardDelete={onCardDelete}
+              {...card}
+            />
           ))}
         </ul>
       </section>
