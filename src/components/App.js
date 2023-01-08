@@ -8,6 +8,7 @@ import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import { CurrentUserContext } from "../context/CurrentUserContext";
 import api from "../utils/api";
+import EditProfilePopup from "./EditProfilePopup";
 
 function App() {
   //переменная состояния попапа обновления данных пользователя
@@ -114,6 +115,15 @@ function App() {
     });
   }
 
+  function handleUpdateUser(user) {
+    api
+      .updateServerUserInfo(user)
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .then(() => closeAllPopups());
+  }
+
   return (
     <div className="page__content">
       <CurrentUserContext.Provider value={currentUser}>
@@ -131,36 +141,11 @@ function App() {
 
         <Footer />
 
-        <PopupWithForm
-          name="user"
-          title="Редактировать профиль"
-          buttonText="Сохранить"
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
-        >
-          <input
-            className="popup__input popup__input_type_username"
-            id="username"
-            type="text"
-            minLength="2"
-            maxLength="40"
-            name="name"
-            placeholder="Имя"
-            required
-          />
-          <span className="username-error popup__error"></span>
-          <input
-            className="popup__input popup__input_type_profession"
-            id="user-job"
-            type="text"
-            minLength="2"
-            maxLength="200"
-            name="about"
-            placeholder="О Себе"
-            required
-          />
-          <span className="user-job-error popup__error"></span>
-        </PopupWithForm>
+          onUpdateUser={handleUpdateUser}
+        />
 
         <PopupWithForm
           name="card"
