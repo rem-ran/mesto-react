@@ -7,11 +7,11 @@ import { CurrentUserContext } from "../context/CurrentUserContext";
 import Footer from "./Footer";
 import Main from "./Main";
 import Header from "./Header";
-import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import PopupWithConfirmation from "./PopupWithConfirmation";
 import api from "../utils/api";
 
 function App() {
@@ -23,6 +23,9 @@ function App() {
 
   //переменная состояния попапа добавления новой карточки
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
+
+  //переменная состояния попапа подтверждения
+  const [isConfirmationPopupOpen, setIsConfirmationPopupOpen] = useState(false);
 
   //переменные состояния попапа с увеличенной картинки карточки
   const [isCardOpen, setIsCardOpen] = useState(false);
@@ -38,6 +41,9 @@ function App() {
   const [userSubmitBtnTxt, setUserSubmitBtnTxt] = useState("Сохранить");
   const [avatarSubmitBtnTxt, setAvatarSubmitBtnTxt] = useState("Сохранить");
   const [cardSubmitBtnTxt, setCardSubmitBtnTxt] = useState("Создать");
+  const [cardDeleteBtnTxt, setCardDeleteBtnTxt] = useState("Да");
+
+  const [cardToDelete, setCardToDelete] = useState({});
 
   //отправляем запрос на сервер и рендерим данные о пользователе
   useEffect(() => {
@@ -82,6 +88,7 @@ function App() {
     setIsAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsCardOpen(false);
+    setIsConfirmationPopupOpen(false);
   };
 
   //отправляем запроса к API для рендеринга начального списка карточек при загрузке страницы
@@ -133,8 +140,15 @@ function App() {
     }
   }
 
+  //метод обработки открытия попапа с подтверждением удаления карточки
+  function handleConfirmDeleteCardPopup(cardId) {
+    setIsConfirmationPopupOpen(true);
+    setCardToDelete(cardId);
+  }
+
   //метод запроса к API для удаления карточки
   function handleCardDelete(card) {
+    setCardDeleteBtnTxt("Удаление...");
     api
       .deleteCard(card._id)
 
@@ -142,8 +156,13 @@ function App() {
         setCards((state) => state.filter((c) => c._id != card._id));
       })
 
+      .then(() => setIsConfirmationPopupOpen(false))
+
       .catch((error) => {
         console.log(`Ошибка при удалении карточки: ${error}`);
+      })
+      .finally(() => {
+        setCardDeleteBtnTxt("Да");
       });
   }
 
@@ -173,9 +192,7 @@ function App() {
     api
       .updateServerUserAvatar(userAvatar)
 
-      .then((res) => {
-        setCurrentUser(res);
-      })
+      .then((res) => setCurrentUser(res))
 
       .then(() => closeAllPopups())
 
@@ -218,7 +235,7 @@ function App() {
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete}
+          onCardDelete={handleConfirmDeleteCardPopup}
           cards={cards}
         />
 
@@ -248,12 +265,13 @@ function App() {
           buttonText={avatarSubmitBtnTxt}
         />
 
-        {/* общий попап с формой */}
-        <PopupWithForm
-          name="card-submit"
-          title="Вы уверены?"
-          buttonText="Да"
+        {/* попап с подтверждением удаления карточки */}
+        <PopupWithConfirmation
+          isOpen={isConfirmationPopupOpen}
           onClose={closeAllPopups}
+          onSubmit={handleCardDelete}
+          cardToDelete={cardToDelete}
+          buttonText={cardDeleteBtnTxt}
         />
 
         {/* попап увеличенной картинки карточки */}

@@ -14,12 +14,15 @@ function Card({
 }) {
   const currentUser = useContext(CurrentUserContext);
 
+  //определяем какие карточки лайкнуты нами
   const isLiked = likes.some((owner) => owner._id === currentUser._id);
 
+  //назначаем переменной стили в зависимости от того лайкнули мы карточку или нет
   const cardLikeButtonClassName = `card__like-btn ${
     isLiked && "card__like-btn_active"
   }`;
 
+  //сравниваем id хозяина карточки и свой id
   const isOwn = owner._id === currentUser._id;
 
   //метод обработки открытия попапа с увеличенной картинкой
@@ -27,10 +30,12 @@ function Card({
     onCardClick({ name, link });
   };
 
+  //метод обработки клика по иконке лайку
   const handleLikeClick = () => {
     onCardLike({ likes, _id });
   };
 
+  //метод обработки клика по иконке удаления
   const handleDeleteClick = () => {
     onCardDelete({ _id });
   };
@@ -43,6 +48,8 @@ function Card({
         alt={name}
         onClick={handleClick}
       />
+
+      {/* отображаем кнопку удаления только на своих карточках */}
       {isOwn && (
         <button
           className="card__delete-btn"
