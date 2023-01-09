@@ -1,13 +1,16 @@
-import PopupWithForm from "./PopupWithForm";
 import { useRef } from "react";
+import PopupWithForm from "./PopupWithForm";
 
+//компонент попапа с формой обновления аватарки пользователя
 function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const avatarRef = useRef();
 
+  //метод обработки изменения состояния инпута аватара пользователя
   function handleAvatarChange() {
     return avatarRef.current.value;
   }
 
+  //метод обрабоки подтверждения формы попапа обновления аватара пользователя
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -37,6 +40,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
         required
         ref={avatarRef}
       />
+
       <span className="avatar-link-error popup__error"></span>
     </PopupWithForm>
   );

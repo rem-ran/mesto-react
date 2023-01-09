@@ -1,9 +1,6 @@
 import { useContext } from "react";
-
-//импортируем компоненты
-import api from "../utils/api.js";
-import Card from "./Card.js";
 import { CurrentUserContext } from "../context/CurrentUserContext.js";
+import Card from "./Card.js";
 
 //компонент начальной страницы
 function Main({

@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 
+// импортируем контекст пользователя
+import { CurrentUserContext } from "../context/CurrentUserContext";
+
 // импортируем компоненты
 import Footer from "./Footer";
 import Main from "./Main";
 import Header from "./Header";
 import PopupWithForm from "./PopupWithForm";
 import ImagePopup from "./ImagePopup";
-import { CurrentUserContext } from "../context/CurrentUserContext";
-import api from "../utils/api";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
+import api from "../utils/api";
 
 function App() {
   //переменная состояния попапа обновления данных пользователя
@@ -27,8 +29,13 @@ function App() {
 
   const [selectedCard, setSelectedCard] = useState({});
 
+  //переменная состояния информации пользователя
   const [currentUser, setCurrentUser] = useState({});
 
+  //переменная состояния начального массива карточек
+  const [cards, setCards] = useState([]);
+
+  //отправляем запрос на сервер и рендерим данные о пользователе
   useEffect(() => {
     api
       .getServerUserInfo()
@@ -73,9 +80,7 @@ function App() {
     setIsCardOpen(false);
   };
 
-  //переменная состояния начального массива карточек
-  const [cards, setCards] = useState([]);
-
+  //отправляем запроса к API для рендеринга начального списка карточек при загрузке страницы
   useEffect(() => {
     api
       .getAllCards()
@@ -91,60 +96,96 @@ function App() {
       });
   }, []);
 
+  //метод запроса к API для добавления и снятия лайка с карточки
   function handleCardLike(card) {
-    // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
 
-    // Отправляем запрос в API и получаем обновлённые данные карточки
     if (!isLiked) {
-      api.putLike(card._id).then((newCard) => {
-        setCards((state) =>
-          state.map((c) => (c._id === card._id ? newCard : c))
-        );
-      });
+      api
+        .putLike(card._id)
+
+        .then((newCard) => {
+          setCards((state) =>
+            state.map((c) => (c._id === card._id ? newCard : c))
+          );
+        })
+
+        .catch((error) => {
+          console.log(`Ошибка при добавлении лайка: ${error}`);
+        });
     } else {
-      api.removeLike(card._id).then((newCard) => {
-        setCards((state) =>
-          state.map((c) => (c._id === card._id ? newCard : c))
-        );
-      });
+      api
+        .removeLike(card._id)
+
+        .then((newCard) => {
+          setCards((state) =>
+            state.map((c) => (c._id === card._id ? newCard : c))
+          );
+        })
+
+        .catch((error) => {
+          console.log(`Ошибка при снятии лайка: ${error}`);
+        });
     }
   }
 
+  //метод запроса к API для удаления карточки
   function handleCardDelete(card) {
-    api.deleteCard(card._id).then(() => {
-      setCards((state) => state.filter((c) => c._id != card._id));
-    });
+    api
+      .deleteCard(card._id)
+
+      .then(() => {
+        setCards((state) => state.filter((c) => c._id != card._id));
+      })
+
+      .catch((error) => {
+        console.log(`Ошибка при удалении карточки: ${error}`);
+      });
   }
 
+  //метод запроса к API для обновления информации пользователя
   function handleUpdateUser(userInfo) {
     api
       .updateServerUserInfo(userInfo)
+
       .then((res) => {
         setCurrentUser(res);
       })
-      .then(() => closeAllPopups());
+
+      .then(() => closeAllPopups())
+
+      .catch((error) => {
+        console.log(`Ошибка при обновлении данных пользователя: ${error}`);
+      });
   }
 
+  //метод запроса к API для обновления аватарки пользователя
   function handleUpdateAvatar(userAvatar) {
     api
       .updateServerUserAvatar(userAvatar)
+
       .then((res) => {
         setCurrentUser(res);
       })
+
       .then(() => closeAllPopups())
+
       .catch((error) => {
         console.log(`Ошибка при обновлении аватара: ${error}`);
       });
   }
 
+  //метод запроса к API для добавления новой карточки
   function handleAddPlace({ name, link }) {
     api
       .addNewCard({ name, link })
+
       .then((newCard) => {
         setCards([newCard, ...cards]);
       })
+
       .then(() => closeAllPopups())
+
       .catch((error) => {
         console.log(`Ошибка при добавлении карточки: ${error}`);
       });
@@ -167,24 +208,28 @@ function App() {
 
         <Footer />
 
+        {/* попап обновления данных пользователя */}
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
         />
 
+        {/* попап добавления новой карточки */}
         <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlace}
         />
 
+        {/* попап обновления аватарки пользователя */}
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
         />
 
+        {/* общий попап с формой */}
         <PopupWithForm
           name="card-submit"
           title="Вы уверены?"
@@ -192,6 +237,7 @@ function App() {
           onClose={closeAllPopups}
         />
 
+        {/* попап увеличенной картинки карточки */}
         <ImagePopup
           card={selectedCard}
           isOpen={isCardOpen}

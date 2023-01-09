@@ -1,24 +1,28 @@
 import { useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 
+//компонент попапа с формой добавления новой карточки
 function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+  //переменная состояния названия карточки
   const [name, setName] = useState();
 
+  //переменная состояния ссылки изображения карточки
   const [link, setLink] = useState();
 
+  //метод обработки изменения переменной состояния названия карточки
   function handleNameChange(e) {
     setName(e.target.value);
   }
 
+  //метод обработки изменения переменной ссылки изображения карточки
   function handleLinkChange(e) {
     setLink(e.target.value);
   }
 
+  //метод обрабоки подтверждения формы попапа добавления карточки
   function handleSubmit(e) {
-    // Запрещаем браузеру переходить по адресу формы
     e.preventDefault();
 
-    // Передаём значения управляемых компонентов во внешний обработчик
     onAddPlace({
       name,
       link,
@@ -27,6 +31,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     setName("");
     setLink("");
   }
+
   return (
     <PopupWithForm
       name="card"
@@ -48,7 +53,9 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         onChange={handleNameChange}
         required
       />
+
       <span className="card-name-error popup__error"></span>
+
       <input
         className="popup__input popup__input_type_card-link"
         id="img-link"
@@ -59,6 +66,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         onChange={handleLinkChange}
         required
       />
+
       <span className="img-link-error popup__error"></span>
     </PopupWithForm>
   );
