@@ -117,22 +117,37 @@ function App() {
     });
   }
 
-  function handleUpdateUser(user) {
+  function handleUpdateUser(userInfo) {
     api
-      .updateServerUserInfo(user)
+      .updateServerUserInfo(userInfo)
       .then((res) => {
         setCurrentUser(res);
       })
       .then(() => closeAllPopups());
   }
 
-  function handleUpdateAvatar(user) {
+  function handleUpdateAvatar(userAvatar) {
     api
-      .updateServerUserAvatar(user)
+      .updateServerUserAvatar(userAvatar)
       .then((res) => {
         setCurrentUser(res);
       })
-      .then(() => closeAllPopups());
+      .then(() => closeAllPopups())
+      .catch((error) => {
+        console.log(`Ошибка при обновлении аватара: ${error}`);
+      });
+  }
+
+  function handleAddPlace({ name, link }) {
+    api
+      .addNewCard({ name, link })
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+      })
+      .then(() => closeAllPopups())
+      .catch((error) => {
+        console.log(`Ошибка при добавлении карточки: ${error}`);
+      });
   }
 
   return (
@@ -158,34 +173,11 @@ function App() {
           onUpdateUser={handleUpdateUser}
         />
 
-        <PopupWithForm
-          name="card"
-          title="Новое место"
-          buttonText="Создать"
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
-        >
-          <input
-            className="popup__input popup__input_type_card-name"
-            id="card-name"
-            type="text"
-            minLength="2"
-            maxLength="30"
-            name="name"
-            placeholder="Название"
-            required
-          />
-          <span className="card-name-error popup__error"></span>
-          <input
-            className="popup__input popup__input_type_card-link"
-            id="img-link"
-            type="url"
-            name="link"
-            placeholder="Ссылка на картинку"
-            required
-          />
-          <span className="img-link-error popup__error"></span>
-        </PopupWithForm>
+          onAddPlace={handleAddPlace}
+        />
 
         <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
