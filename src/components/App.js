@@ -9,6 +9,8 @@ import ImagePopup from "./ImagePopup";
 import { CurrentUserContext } from "../context/CurrentUserContext";
 import api from "../utils/api";
 import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
+import AddPlacePopup from "./AddPlacePopup";
 
 function App() {
   //переменная состояния попапа обновления данных пользователя
@@ -124,6 +126,15 @@ function App() {
       .then(() => closeAllPopups());
   }
 
+  function handleUpdateAvatar(user) {
+    api
+      .updateServerUserAvatar(user)
+      .then((res) => {
+        setCurrentUser(res);
+      })
+      .then(() => closeAllPopups());
+  }
+
   return (
     <div className="page__content">
       <CurrentUserContext.Provider value={currentUser}>
@@ -176,23 +187,11 @@ function App() {
           <span className="img-link-error popup__error"></span>
         </PopupWithForm>
 
-        <PopupWithForm
-          name="avatar"
-          title="Обновить аватар"
-          buttonText="Сохранить"
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
-        >
-          <input
-            className="popup__input popup__input_type_avatar-link"
-            id="avatar-link"
-            type="url"
-            name="avatar"
-            placeholder="Ссылка на аватарку"
-            required
-          />
-          <span className="avatar-link-error popup__error"></span>
-        </PopupWithForm>
+          onUpdateAvatar={handleUpdateAvatar}
+        />
 
         <PopupWithForm
           name="card-submit"
