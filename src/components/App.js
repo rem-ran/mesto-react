@@ -26,7 +26,6 @@ function App() {
 
   //переменные состояния попапа с увеличенной картинки карточки
   const [isCardOpen, setIsCardOpen] = useState(false);
-
   const [selectedCard, setSelectedCard] = useState({});
 
   //переменная состояния информации пользователя
@@ -34,6 +33,11 @@ function App() {
 
   //переменная состояния начального массива карточек
   const [cards, setCards] = useState([]);
+
+  //переменные состояния текста кнопок попапов
+  const [userSubmitBtnTxt, setUserSubmitBtnTxt] = useState("Сохранить");
+  const [avatarSubmitBtnTxt, setAvatarSubmitBtnTxt] = useState("Сохранить");
+  const [cardSubmitBtnTxt, setCardSubmitBtnTxt] = useState("Создать");
 
   //отправляем запрос на сервер и рендерим данные о пользователе
   useEffect(() => {
@@ -145,6 +149,7 @@ function App() {
 
   //метод запроса к API для обновления информации пользователя
   function handleUpdateUser(userInfo) {
+    setUserSubmitBtnTxt("Сохранение...");
     api
       .updateServerUserInfo(userInfo)
 
@@ -156,11 +161,15 @@ function App() {
 
       .catch((error) => {
         console.log(`Ошибка при обновлении данных пользователя: ${error}`);
+      })
+      .finally(() => {
+        setUserSubmitBtnTxt("Сохранить");
       });
   }
 
   //метод запроса к API для обновления аватарки пользователя
   function handleUpdateAvatar(userAvatar) {
+    setAvatarSubmitBtnTxt("Сохранение...");
     api
       .updateServerUserAvatar(userAvatar)
 
@@ -172,11 +181,15 @@ function App() {
 
       .catch((error) => {
         console.log(`Ошибка при обновлении аватара: ${error}`);
+      })
+      .finally(() => {
+        setAvatarSubmitBtnTxt("Сохранить");
       });
   }
 
   //метод запроса к API для добавления новой карточки
   function handleAddPlace({ name, link }) {
+    setCardSubmitBtnTxt("Создание...");
     api
       .addNewCard({ name, link })
 
@@ -188,6 +201,9 @@ function App() {
 
       .catch((error) => {
         console.log(`Ошибка при добавлении карточки: ${error}`);
+      })
+      .finally(() => {
+        setCardSubmitBtnTxt("Создать");
       });
   }
 
@@ -213,6 +229,7 @@ function App() {
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
+          buttonText={userSubmitBtnTxt}
         />
 
         {/* попап добавления новой карточки */}
@@ -220,6 +237,7 @@ function App() {
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlace}
+          buttonText={cardSubmitBtnTxt}
         />
 
         {/* попап обновления аватарки пользователя */}
@@ -227,6 +245,7 @@ function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
+          buttonText={avatarSubmitBtnTxt}
         />
 
         {/* общий попап с формой */}

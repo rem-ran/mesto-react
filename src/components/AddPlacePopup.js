@@ -2,7 +2,7 @@ import { useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 //компонент попапа с формой добавления новой карточки
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonText }) {
   //переменная состояния названия карточки
   const [name, setName] = useState();
 
@@ -36,7 +36,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     <PopupWithForm
       name="card"
       title="Новое место"
-      buttonText="Создать"
+      buttonText={buttonText}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
