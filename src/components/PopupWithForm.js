@@ -23,6 +23,7 @@ function PopupWithForm({
           className={`popup__form popup__form_type_${name}`}
           method="get"
           name={name}
+          onSubmit={onSubmit}
         >
           {children}
 
@@ -30,7 +31,6 @@ function PopupWithForm({
           <button
             className={`popup__save-btn popup__save-btn_type_${name}`}
             type="submit"
-            onClick={onSubmit}
           >
             {buttonText}
           </button>
