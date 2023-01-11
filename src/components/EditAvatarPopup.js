@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 //компонент попапа с формой обновления аватарки пользователя
@@ -10,6 +10,10 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
     return avatarRef.current.value;
   }
 
+  useEffect(() => {
+    avatarRef.current.value = "";
+  }, [isOpen]);
+
   //метод обрабоки подтверждения формы попапа обновления аватара пользователя
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,7 +21,6 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
     onUpdateAvatar({
       avatar: avatarRef.current.value,
     });
-    avatarRef.current.value = "";
   };
 
   return (

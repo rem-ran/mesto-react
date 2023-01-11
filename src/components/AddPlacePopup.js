@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 //компонент попапа с формой добавления новой карточки
@@ -19,6 +19,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
     setLink(e.target.value);
   }
 
+  useEffect(() => {
+    setName("");
+    setLink("");
+  }, [isOpen]);
+
   //метод обрабоки подтверждения формы попапа добавления карточки
   function handleSubmit(e) {
     e.preventDefault();
@@ -27,9 +32,6 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
       name,
       link,
     });
-
-    setName("");
-    setLink("");
   }
 
   return (
