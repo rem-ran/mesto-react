@@ -37,13 +37,11 @@ function App() {
   //переменная состояния начального массива карточек
   const [cards, setCards] = useState([]);
 
-  //переменные состояния текста кнопок попапов
-  const [userSubmitBtnTxt, setUserSubmitBtnTxt] = useState("Сохранить");
-  const [avatarSubmitBtnTxt, setAvatarSubmitBtnTxt] = useState("Сохранить");
-  const [cardSubmitBtnTxt, setCardSubmitBtnTxt] = useState("Создать");
-  const [cardDeleteBtnTxt, setCardDeleteBtnTxt] = useState("Да");
-
+  //переменная состояния карточки для удаления
   const [cardToDelete, setCardToDelete] = useState({});
+
+  //переменная состояния открытого модального окна
+  const [isLoading, setIsLoading] = useState(false);
 
   //отправляем запрос на сервер и рендерим данные о пользователе
   useEffect(() => {
@@ -81,6 +79,12 @@ function App() {
     setIsCardOpen(true);
     setSelectedCard(initialData);
   };
+
+  //метод обработки открытия попапа с подтверждением удаления карточки
+  function handleConfirmDeleteCardPopup(cardId) {
+    setIsConfirmationPopupOpen(true);
+    setCardToDelete(cardId);
+  }
 
   //метод обработки закрытия всех попапов
   const closeAllPopups = () => {
@@ -140,15 +144,9 @@ function App() {
     }
   }
 
-  //метод обработки открытия попапа с подтверждением удаления карточки
-  function handleConfirmDeleteCardPopup(cardId) {
-    setIsConfirmationPopupOpen(true);
-    setCardToDelete(cardId);
-  }
-
   //метод запроса к API для удаления карточки
   function handleCardDelete(card) {
-    setCardDeleteBtnTxt("Удаление...");
+    setIsLoading(true);
     api
       .deleteCard(card._id)
 
@@ -156,19 +154,19 @@ function App() {
         setCards((state) => state.filter((c) => c._id != card._id));
       })
 
-      .then(() => setIsConfirmationPopupOpen(false))
+      .then(() => closeAllPopups())
 
       .catch((error) => {
         console.log(`Ошибка при удалении карточки: ${error}`);
       })
       .finally(() => {
-        setCardDeleteBtnTxt("Да");
+        setIsLoading(false);
       });
   }
 
   //метод запроса к API для обновления информации пользователя
   function handleUpdateUser(userInfo) {
-    setUserSubmitBtnTxt("Сохранение...");
+    setIsLoading(true);
     api
       .updateServerUserInfo(userInfo)
 
@@ -182,13 +180,13 @@ function App() {
         console.log(`Ошибка при обновлении данных пользователя: ${error}`);
       })
       .finally(() => {
-        setUserSubmitBtnTxt("Сохранить");
+        setIsLoading(false);
       });
   }
 
   //метод запроса к API для обновления аватарки пользователя
   function handleUpdateAvatar(userAvatar) {
-    setAvatarSubmitBtnTxt("Сохранение...");
+    setIsLoading(true);
     api
       .updateServerUserAvatar(userAvatar)
 
@@ -200,13 +198,13 @@ function App() {
         console.log(`Ошибка при обновлении аватара: ${error}`);
       })
       .finally(() => {
-        setAvatarSubmitBtnTxt("Сохранить");
+        setIsLoading(false);
       });
   }
 
   //метод запроса к API для добавления новой карточки
   function handleAddPlace({ name, link }) {
-    setCardSubmitBtnTxt("Создание...");
+    setIsLoading(true);
     api
       .addNewCard({ name, link })
 
@@ -220,7 +218,7 @@ function App() {
         console.log(`Ошибка при добавлении карточки: ${error}`);
       })
       .finally(() => {
-        setCardSubmitBtnTxt("Создать");
+        setIsLoading(false);
       });
   }
 
@@ -246,7 +244,7 @@ function App() {
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           onUpdateUser={handleUpdateUser}
-          buttonText={userSubmitBtnTxt}
+          isLoading={isLoading}
         />
 
         {/* попап добавления новой карточки */}
@@ -254,7 +252,7 @@ function App() {
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           onAddPlace={handleAddPlace}
-          buttonText={cardSubmitBtnTxt}
+          isLoading={isLoading}
         />
 
         {/* попап обновления аватарки пользователя */}
@@ -262,16 +260,16 @@ function App() {
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           onUpdateAvatar={handleUpdateAvatar}
-          buttonText={avatarSubmitBtnTxt}
+          isLoading={isLoading}
         />
 
         {/* попап с подтверждением удаления карточки */}
         <PopupWithConfirmation
           isOpen={isConfirmationPopupOpen}
           onClose={closeAllPopups}
-          onSubmit={handleCardDelete}
+          onCardDelete={handleCardDelete}
           cardToDelete={cardToDelete}
-          buttonText={cardDeleteBtnTxt}
+          isLoading={isLoading}
         />
 
         {/* попап увеличенной картинки карточки */}

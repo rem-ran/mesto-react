@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 //компонент попапа с формой добавления новой карточки
-function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonText }) {
+function AddPlacePopup({ isOpen, onClose, onAddPlace, isLoading }) {
   //переменная состояния названия карточки
   const [name, setName] = useState();
 
@@ -19,6 +19,11 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonText }) {
     setLink(e.target.value);
   }
 
+  useEffect(() => {
+    setName("");
+    setLink("");
+  }, [isOpen]);
+
   //метод обрабоки подтверждения формы попапа добавления карточки
   function handleSubmit(e) {
     e.preventDefault();
@@ -27,16 +32,13 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace, buttonText }) {
       name,
       link,
     });
-
-    setName("");
-    setLink("");
   }
 
   return (
     <PopupWithForm
       name="card"
       title="Новое место"
-      buttonText={buttonText}
+      buttonText={isLoading ? "Создание..." : "Создать"}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
