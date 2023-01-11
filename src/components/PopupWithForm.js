@@ -1,5 +1,13 @@
 //компонент попапа с формой
-function PopupWithForm({ children, title, name, buttonText, isOpen, onClose }) {
+function PopupWithForm({
+  children,
+  title,
+  name,
+  buttonText,
+  isOpen,
+  onClose,
+  onSubmit,
+}) {
   return (
     <section
       className={`popup form popup_type_${name} ${
@@ -15,6 +23,7 @@ function PopupWithForm({ children, title, name, buttonText, isOpen, onClose }) {
           className={`popup__form popup__form_type_${name}`}
           method="get"
           name={name}
+          onSubmit={onSubmit}
         >
           {children}
 
