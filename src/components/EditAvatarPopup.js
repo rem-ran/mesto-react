@@ -2,7 +2,7 @@ import { useRef } from "react";
 import PopupWithForm from "./PopupWithForm";
 
 //компонент попапа с формой обновления аватарки пользователя
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, buttonText }) {
+function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, isLoading }) {
   const avatarRef = useRef();
 
   //метод обработки изменения состояния инпута аватара пользователя
@@ -24,7 +24,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar, buttonText }) {
     <PopupWithForm
       name="avatar"
       title="Обновить аватар"
-      buttonText={buttonText}
+      buttonText={isLoading ? "Сохранение..." : "Сохранить"}
       onSubmit={handleSubmit}
       isOpen={isOpen}
       onClose={onClose}

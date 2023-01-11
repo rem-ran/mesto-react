@@ -56,7 +56,7 @@ function Card({
           aria-label="Delete"
           type="button"
           onClick={handleDeleteClick}
-        ></button>
+        />
       )}
 
       <div className="card__text-box">
@@ -67,7 +67,7 @@ function Card({
             aria-label="Like"
             type="button"
             onClick={handleLikeClick}
-          ></button>
+          />
           <span className="card__like-counter">{likes.length}</span>
         </div>
       </div>

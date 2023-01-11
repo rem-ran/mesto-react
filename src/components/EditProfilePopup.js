@@ -3,7 +3,7 @@ import { CurrentUserContext } from "../context/CurrentUserContext";
 import PopupWithForm from "./PopupWithForm";
 
 //компонент попапа с формой изменения данных пользователя
-function EditProfilePopup({ isOpen, onClose, onUpdateUser, buttonText }) {
+function EditProfilePopup({ isOpen, onClose, onUpdateUser, isLoading }) {
   const currentUser = useContext(CurrentUserContext);
 
   //переменная состояния имени пользователя
@@ -42,7 +42,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser, buttonText }) {
     <PopupWithForm
       name="user"
       title="Редактировать профиль"
-      buttonText={buttonText}
+      buttonText={isLoading ? "Сохранение..." : "Сохранить"}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}

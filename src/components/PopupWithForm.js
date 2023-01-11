@@ -42,7 +42,7 @@ function PopupWithForm({
           type="button"
           aria-label="Close"
           onClick={onClose}
-        ></button>
+        />
       </div>
     </section>
   );

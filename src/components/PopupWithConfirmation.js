@@ -4,22 +4,22 @@ import PopupWithForm from "./PopupWithForm";
 function PopupWithConfirmation({
   isOpen,
   onClose,
-  onSubmit,
+  onCardDelete,
   cardToDelete,
-  buttonText,
+  isLoading,
 }) {
   //метод обрабоки подтверждения формы попапа подтверждения удаления карточки
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onSubmit(cardToDelete);
+    onCardDelete(cardToDelete);
   };
 
   return (
     <PopupWithForm
       name="card-submit"
       title="Вы уверены?"
-      buttonText={buttonText}
+      buttonText={isLoading ? "Удаление..." : "Да"}
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={handleSubmit}
